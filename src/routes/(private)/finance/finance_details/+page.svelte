@@ -81,12 +81,17 @@
 	};
 
 	function closeDeleteDialog() {
-		(document.getElementById('delete_operation_modal') as HTMLFormElement).close();
+		if (typeof window !== 'undefined') {
+			(document.getElementById('delete_operation_modal') as HTMLFormElement).close();
+			selectedCategory = null;
+		}
 	}
 
 	function closeCategoryDialog() {
-		(document.getElementById('category_modal') as HTMLFormElement).close();
-		selectedCategory = null;
+		if (typeof window !== 'undefined') {
+			(document.getElementById('category_modal') as HTMLFormElement).close();
+			selectedCategory = null;
+		}
 	}
 </script>
 
@@ -178,7 +183,7 @@
 	</div>
 </DetailsPage>
 
-<Dialog id="delete_operation_modal" title="Usuwanie transakcji">
+<Dialog dialogId="delete_operation_modal" title="Usuwanie transakcji">
 	<p class="text-xl font-semibold text-gray-700 dark:text-gray-200">
 		Czy na pewno chcesz usunąć transakcję <b>{data.finance?.name}</b>?
 	</p>
@@ -202,7 +207,7 @@
 </Dialog>
 
 <Dialog
-	id="category_modal"
+	dialogId="category_modal"
 	title="Kategoria transakcji"
 	closeDialogOverride={closeCategoryDialog()}
 >

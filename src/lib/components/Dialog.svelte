@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let id;
+    export let dialogId;
 
     /** It is possible to override default function with custom one. In that case you have to handle closing dialog yourself. */
     export let closeDialogOverride : void | null = null;
@@ -7,15 +7,17 @@
     export let title : string;
 
     function closeDialog() {
-        if (!typeof(closeDialogOverride) != null) {
-            closeDialogOverride;
-        } else {
-            (document.getElementById(id) as HTMLFormElement).close();
-        }
-	}
+    if (typeof window !== 'undefined') {
+      if (closeDialogOverride != null) {
+        closeDialogOverride;
+      } else {
+        (document.getElementById(dialogId) as HTMLFormElement)?.close();
+      }
+    }
+  }
 </script>
 
-<dialog id={id} class="modal">
+<dialog id={dialogId} class="modal">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div class="modal-backdrop" on:click|stopPropagation={closeDialog} />

@@ -7,6 +7,7 @@
 	import TableView from '$lib/components/TableView.svelte';
 	import MainPage from '$lib/components/MainPage.svelte';
 	import PersonAvatarText from '$lib/components/PersonAvatarText.svelte';
+	import Dialog from '$lib/components/Dialog.svelte';
 
 	let selectedPerson = null;
 
@@ -97,107 +98,58 @@
 		{/each}
 	</TableView>
 </MainPage>
-<dialog id="person_modal" class="modal">
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="modal-backdrop" on:click|stopPropagation={closeDialog} />
-	<div class="border rounded-lg shadow relative max-w-2xl modal-box">
-		<div class="flex justify-end p-2">
-			<button
-				type="button"
-				class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-				on:click={closeDialog}
-			>
-				<svg
-					class="w-5 h-5"
-					fill="currentColor"
-					viewBox="0 0 20 20"
-					xmlns="http://www.w3.org/2000/svg"
-					><path
-						fill-rule="evenodd"
-						d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-						clip-rule="evenodd"
-					/></svg
-				>
-			</button>
-		</div>
 
-		<div class="p-6 pt-0 text-center">
-			<svg
-				class="w-60 h-20 text-red-600 mx-auto"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
+<Dialog dialogId="person_modal" title="Uprawnienia dostępu" closeDialogOverride={closeDialog()}>
+	{#if !selectedPerson?.fk_user_id}
+		<p class="text-xl mb-3 font-semibold text-gray-700 dark:text-gray-200">
+			Czy chcesz przyznać dostęp do dokumentacji jednostki użytkownikowi <b
+				>{capitalizeEveryWord(selectedPerson?.name || '')}</b
+			>?
+		</p>
+		<form id="email-form" method="dialog" on:submit={addAccess}>
+			<label for="email">Adres email użytkownika</label>
+			<input type="email" name="email" id="email" placeholder="jan.kowalski@example.com" required />
+		</form>
+		<div class="flex justify-center mt-5">
+			<button
+				form="email-form"
+				class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
 			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-				/>
-			</svg>
-			<h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-				Uprawnienia dostępu
-			</h2>
-			{#if !selectedPerson?.fk_user_id}
-				<p class="text-xl mb-3 font-semibold text-gray-700 dark:text-gray-200">
-					Czy chcesz przyznać dostęp do dokumentacji jednostki użytkownikowi <b
-						>{capitalizeEveryWord(selectedPerson?.name || '')}</b
-					>?
-				</p>
-				<form id="email-form" method="dialog" on:submit={addAccess}>
-					<label for="email">Adres email użytkownika</label>
-					<input
-						type="email"
-						name="email"
-						id="email"
-						placeholder="jan.kowalski@example.com"
-						required
-					/>
-				</form>
-				<div class="flex justify-center mt-5">
-					<button
-						form="email-form"
-						class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
-					>
-						Tak, przyznaj
-					</button>
-					<form method="dialog" on:submit={closeDialog}>
-						<button
-							class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2 text-center"
-						>
-							Nie, anuluj
-						</button>
-					</form>
-				</div>
-			{/if}
-			{#if selectedPerson?.fk_user_id}
-				<p class="text-xl mb-3 font-semibold text-gray-700 dark:text-gray-200">
-					Użytkownik <b>{capitalizeEveryWord(selectedPerson?.name || '')}</b> ma już dostęp do dokumentacji
-					jednostki.
-				</p>
-				<div class="flex justify-center mt-5">
-					<button
-						class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
-					>
-						Zabierz dostęp
-					</button>
-					<button
-						class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
-						on:click={resetPassword}
-					>
-						Zresetuj hasło
-					</button>
-					<form method="dialog" on:submit={closeDialog}>
-						<button
-							class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2 text-center"
-						>
-							Anuluj
-						</button>
-					</form>
-				</div>
-			{/if}
+				Tak, przyznaj
+			</button>
+			<form method="dialog" on:submit={closeDialog}>
+				<button
+					class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2 text-center"
+				>
+					Nie, anuluj
+				</button>
+			</form>
 		</div>
-	</div>
-</dialog>
+	{/if}
+	{#if selectedPerson?.fk_user_id}
+		<p class="text-xl mb-3 font-semibold text-gray-700 dark:text-gray-200">
+			Użytkownik <b>{capitalizeEveryWord(selectedPerson?.name || '')}</b> ma już dostęp do dokumentacji
+			jednostki.
+		</p>
+		<div class="flex justify-center mt-5">
+			<button
+				class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
+			>
+				Zabierz dostęp
+			</button>
+			<button
+				class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
+				on:click={resetPassword}
+			>
+				Zresetuj hasło
+			</button>
+			<form method="dialog" on:submit={closeDialog}>
+				<button
+					class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2 text-center"
+				>
+					Anuluj
+				</button>
+			</form>
+		</div>
+	{/if}
+</Dialog>
