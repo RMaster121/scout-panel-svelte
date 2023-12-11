@@ -178,72 +178,34 @@
 	</div>
 </DetailsPage>
 
-<dialog id="delete_operation_modal" class="modal">
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="modal-backdrop" on:click|stopPropagation={closeDeleteDialog} />
-	<div class="border rounded-lg shadow relative max-w-2xl modal-box">
-		<div class="flex justify-end p-2">
+<Dialog id="delete_operation_modal" title="Usuwanie transakcji">
+	<p class="text-xl font-semibold text-gray-700 dark:text-gray-200">
+		Czy na pewno chcesz usunąć transakcję <b>{data.finance?.name}</b>?
+	</p>
+	<p class="text-gray-600 text-lg font-semibold dark:text-gray-400">Tego nie można cofnąć.</p>
+	<div class="flex justify-center mt-5">
+		<button
+			form="email-form"
+			class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
+			on:click={deleteOperation}
+		>
+			Tak, usuń
+		</button>
+		<form method="dialog" on:submit={closeDeleteDialog}>
 			<button
-				type="button"
-				class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-				on:click={closeDeleteDialog}
+				class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2 text-center"
 			>
-				<svg
-					class="w-5 h-5"
-					fill="currentColor"
-					viewBox="0 0 20 20"
-					xmlns="http://www.w3.org/2000/svg"
-					><path
-						fill-rule="evenodd"
-						d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-						clip-rule="evenodd"
-					/></svg
-				>
+				Nie, anuluj
 			</button>
-		</div>
-
-		<div class="p-6 pt-0 text-center">
-			<svg
-				class="w-60 h-20 text-red-600 mx-auto"
-				fill="none"
-				stroke="currentColor"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-				/>
-			</svg>
-			<h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-200">Usuń transakcję</h2>
-			<p class="text-xl font-semibold text-gray-700 dark:text-gray-200">
-				Czy na pewno chcesz usunąć transakcję <b>{data.finance?.name}</b>?
-			</p>
-			<p class="text-gray-600 text-lg font-semibold dark:text-gray-400">Tego nie można cofnąć.</p>
-			<div class="flex justify-center mt-5">
-				<button
-					form="email-form"
-					class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2 text-center mr-2"
-					on:click={deleteOperation}
-				>
-					Tak, usuń
-				</button>
-				<form method="dialog" on:submit={closeDeleteDialog}>
-					<button
-						class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2 text-center"
-					>
-						Nie, anuluj
-					</button>
-				</form>
-			</div>
-		</div>
+		</form>
 	</div>
-</dialog>
+</Dialog>
 
-<Dialog>
+<Dialog
+	id="category_modal"
+	title="Kategoria transakcji"
+	closeDialogOverride={closeCategoryDialog()}
+>
 	<p class="text-xl mb-3 font-semibold text-gray-700 dark:text-gray-200">
 		Dodaj nową kategorię transakcji
 	</p>
