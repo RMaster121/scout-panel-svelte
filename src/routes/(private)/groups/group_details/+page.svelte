@@ -81,6 +81,7 @@
 	};
 
 	function closeDeleteDialog() {
+		if (typeof document === 'undefined') return;
 		(document.getElementById('delete_group_modal') as HTMLFormElement).close();
 	}
 </script>

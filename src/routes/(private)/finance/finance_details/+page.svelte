@@ -88,10 +88,9 @@
 	}
 
 	function closeCategoryDialog() {
-		if (typeof window !== 'undefined') {
-			(document.getElementById('category_modal') as HTMLFormElement).close();
-			selectedCategory = null;
-		}
+		if (typeof document === 'undefined') return;
+		(document.getElementById('category_modal') as HTMLFormElement).close();
+		selectedCategory = null;
 	}
 </script>
 

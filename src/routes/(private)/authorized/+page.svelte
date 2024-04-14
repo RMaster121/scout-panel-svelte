@@ -53,6 +53,7 @@
 	};
 
 	function closeDialog() {
+		if (typeof document === 'undefined') return;
 		(document.getElementById('person_modal') as HTMLFormElement).close();
 		selectedPerson = null;
 	}

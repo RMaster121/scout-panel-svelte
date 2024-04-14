@@ -60,6 +60,7 @@
 	};
 
 	function closeDeleteDialog() {
+		if (typeof document === 'undefined') return;
 		(document.getElementById('delete_fee_modal') as HTMLFormElement).close();
 	}
 </script>
