@@ -1,4 +1,4 @@
-<img src="https://github.com/RMaster121/scout-panel-svelte/blob/main/src/lib/assets/app_logo.jpg?raw=true" height="64px"/>
+<img src="https://github.com/RMaster121/scout-panel-svelte/blob/main/src/lib/assets/app_logo.jpg?raw=true" height="64px" />
 
 # Scout Manager
 > Web app created for managing scout's team
